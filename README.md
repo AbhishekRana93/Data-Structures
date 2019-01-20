@@ -1,2 +1,2 @@
 # Data-Structures
-Implementation of some famous data structures
+Implementation of algorithms and data structures in different languages
