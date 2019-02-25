@@ -1,94 +1,33 @@
-use std::rc::Rc;
-use std::cell::RefCell;
+mod bst;
+mod graph;
+mod binary_tree;
 
-// Definition for a binary tree node.
-#[derive(Debug, PartialEq, Eq)]
-pub struct TreeNode {
-  pub val: i32,
-  pub left: Option<Rc<RefCell<TreeNode>>>,
-  pub right: Option<Rc<RefCell<TreeNode>>>,
-}
+    pub fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
+        let mut nums = nums.clone();
+        nums.sort();
 
-impl TreeNode {
-  #[inline]
-  pub fn new(val: i32) -> Self {
-    TreeNode {
-      val,
-      left: None,
-      right: None
-    }
-  }
-}
+        let mut ans : Vec<i32> = vec![];
 
-struct Solution;
-
-impl Solution {
-    pub fn is_unival_tree(root: Option<Rc<RefCell<TreeNode>>>) -> bool {
-        match &root {
-            Some(val) => {
-                Self::helper(&root, val.borrow().val)
-            },
-            None => true
-        }
-    }
-
-    pub fn helper(root : &Option<Rc<RefCell<TreeNode>>>, k : i32) -> bool {
-        match root {
-            None => true,
-            Some(val) =>
-                Self::helper(&val.borrow().left, k) &&
-                Self::helper(&val.borrow().right, k) &&
-                val.borrow().val == k
-        }
-    }
-}
-
-pub fn helper(root: &Option<Rc<RefCell<TreeNode>>>, k : i32) -> bool {
-    match root {
-        Some(val) => {
-            // println!("{:?}", val.borrow());
-            val.borrow().val == k && helper(&val.borrow().left, k) && helper(&val.borrow().right, k)
-            // true
-        },
-        None => true
-    }
-}
-
-pub fn range_sum_bst(root: Option<Rc<RefCell<TreeNode>>>, l: i32, r: i32) -> i32 {
-    fn helper(root : &Option<Rc<RefCell<TreeNode>>>, l: i32, r: i32) -> i32 {
-        match root {
-            None => 0,
-            Some(ref_val) => {
-                let x = helper(&ref_val.borrow().left, l, r) +
-                        helper(&ref_val.borrow().right, l, r);
-                let y = ref_val.borrow().val;
-
-                if y >= l && y <= r {
-                    return y + x;
-                }
-
-                x
+        let mut i = 0;
+        let mut j = nums.len();
+        while i < j {
+            if nums[i] + nums[j] < target {
+                i += 1;
+            } else if nums[i] + nums[j] > target {
+                j -= 1;
+            } else {
+                ans.push(nums[i]);
+                ans.push(nums[j]);
+                break;
             }
         }
+
+        return ans;
     }
 
-    helper(&root, l, r)
-}
-
 fn main() {
-
-    // let x = vec![-4,-1,0,3,10];
-    let mut node = TreeNode :: new(5);
-
-    node.left = Some(Rc::new(RefCell::new(TreeNode :: new(5))));
-    let node_rt_lt = Some(Rc::new(RefCell::new(TreeNode :: new(5))));
-
-    let mut node_rt = TreeNode :: new(5);
-    node_rt.left = node_rt_lt;
-
-    node.right = Some(Rc::new(RefCell::new(node_rt)));
-
-    // print!("{:?}\n", Solution::is_unival_tree(Some(Rc::new(RefCell::new(node)))));
-    print!("{:?}\n", range_sum_bst(Some(Rc::new(RefCell::new(node))), 1,6));
-
+    // bst::execute();
+    // graph::execute();
+    // binary_tree::execute();
+    print!("{:?}", two_sum(vec![2,7,11,15], 9));
 }
